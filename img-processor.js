@@ -1,7 +1,7 @@
 const Jimp = require("jimp");
 const NUMLEVELS = 7;
 const LEVELWIDTH = 256 / NUMLEVELS;
-const RESIZECLAMP = 200;
+const RESIZECLAMP = 300;
 
 const clamp = (num, a, b) =>
   Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
@@ -25,9 +25,9 @@ module.exports.luminance = function (filePath, callback) {
     if (err) throw err;
 
     let imgArray = [];
-    for (xpixel = 0, width = file.getWidth(); xpixel < width; xpixel++) {
+    for (ypixel = 0, height = file.getHeight(); ypixel < height; ypixel++) {
       let pixels = [];
-      for (ypixel = 0, height = file.getHeight(); ypixel < height; ypixel++) {
+      for (xpixel = 0, width = file.getWidth(); xpixel < width; xpixel++) {
         let rgbVal = Jimp.intToRGBA(file.getPixelColor(xpixel, ypixel));
         let quantVal = rgbVal.r;
         pixels.push(quantVal);

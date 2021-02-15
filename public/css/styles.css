@@ -21,3 +21,9 @@ button {
   text-align: center;
   font-family: "Montserrat", sans-serif;
 }
+
+td {
+  margin: 0;
+  padding: 0;
+  line-height: 0.75;
+}
