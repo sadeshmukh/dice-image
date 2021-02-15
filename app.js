@@ -27,13 +27,11 @@ app.get("/results/:path", function (req, res) {
 app.post("/", function (req, res) {
   let file = req.files.file;
   console.log(file.tempFilePath);
-  imgProcessor.dither(file.tempFilePath);
-
-  res.render("index", {
-    imageArray: [
-      [4, 5, 6],
-      [7, 8, 9],
-    ],
+  imgProcessor.dither(file.tempFilePath, (err, imgArray) => {
+    console.log("callback called back");
+    res.render("index", {
+      imageArray: imgArray,
+    });
   });
 });
 

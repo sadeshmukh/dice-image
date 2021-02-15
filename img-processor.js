@@ -1,18 +1,22 @@
 const Jimp = require("jimp");
 const NUMLEVELS = 7;
 const LEVELWIDTH = 256 / NUMLEVELS;
+const RESIZECLAMP = 200;
 
-module.exports.prepare = function (filePath) {
+const clamp = (num, a, b) =>
+  Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
+
+module.exports.prepare = function (filePath, callback) {
   Jimp.read(filePath, (err, file) => {
     if (err) throw err;
     file.grayscale();
-    if (file.getHeight() > 200 && file.getHeight() >= file.getWidth()) {
-      file.resize(Jimp.AUTO, 200);
-    } else if (file.getWidth() > 200) {
-      file.resize(200, Jimp.AUTO);
+    if (file.getHeight() > RESIZECLAMP && file.getHeight() >= file.getWidth()) {
+      file.resize(Jimp.AUTO, RESIZECLAMP);
+    } else if (file.getWidth() > RESIZECLAMP) {
+      file.resize(RESIZECLAMP, Jimp.AUTO);
     }
-    file.resize(file.getWidth() / 3, Jimp.AUTO);
     file.write(filePath);
+    callback(filePath);
   });
 };
 
@@ -38,35 +42,38 @@ module.exports.dither = function (filePath, callback) {
   Jimp.read(filePath, (err, file) => {
     if (err) throw err;
     console.log("\n\n--Start--\n\n");
-    module.exports.prepare(filePath);
-    module.exports.luminance(filePath, (img) => {
-      //   console.log(img);
-      console.log(img.length, img[0].length);
-      for (let x = 0, row = img[x]; x < img.length; x++, row = img[x]) {
-        for (let y = 0, pixel = img[y]; y < row.length; y++, pixel = row[y]) {
-          //   console.log(row.length);
-          let qVal = Math.floor((pixel + 1) / LEVELWIDTH);
-          img[x][y] = qVal;
-          let debt = pixel - qVal * 7;
-          // #region Error Correction
-          // Right
-          y + 1 < row.length && (img[x][y + 1] += Math.round((7 / 16) * debt));
-          // Bottom right
-          x + 1 < img.length &&
+    module.exports.prepare(filePath, (filePath) => {
+      module.exports.luminance(filePath, (img) => {
+        //   console.log(img);
+        console.log(img.length, img[0].length);
+        for (let x = 0, row = img[x]; x < img.length; x++, row = img[x]) {
+          for (let y = 0, pixel = row[y]; y < row.length; y++, pixel = row[y]) {
+            pixel = clamp(pixel, 0, 255);
+            let qVal = Math.floor(pixel / LEVELWIDTH);
+            img[x][y] = qVal;
+            let debt = pixel - qVal * NUMLEVELS;
+
+            // #region Error Correction
+            // Right
             y + 1 < row.length &&
-            (img[x + 1][y + 1] += Math.round(1 / 16) * debt);
-          // Bottom
-          x + 1 < img.length && (img[x + 1][y] += Math.round(5 / 16) * debt);
-          // Bottom left
-          x + 1 < img.length &&
-            y > 0 &&
-            (img[x + 1][y - 1] += Math.round(3 / 16) * debt);
-          //#endregion
+              (img[x][y + 1] += Math.round((7 / 16) * debt));
+            // Bottom right
+            x + 1 < img.length &&
+              y + 1 < row.length &&
+              (img[x + 1][y + 1] += Math.round(1 / 16) * debt);
+            // Bottom
+            x + 1 < img.length && (img[x + 1][y] += Math.round(5 / 16) * debt);
+            // Bottom left
+            x + 1 < img.length &&
+              y > 0 &&
+              (img[x + 1][y - 1] += Math.round(3 / 16) * debt);
+            //#endregion
+          }
         }
-      }
-      console.log(img);
-      callback();
-      console.log("\n\nDone\n\n");
+        console.log(img);
+        callback(null, img);
+        console.log("\n\nDone\n\n");
+      });
     });
   });
 };
