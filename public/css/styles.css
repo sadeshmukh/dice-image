@@ -1,0 +1,23 @@
+body {
+  font-family: "Merriweather", "Cabin", sans-serif;
+  text-align: center;
+}
+
+input,
+button {
+  padding: 0.5rem;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+}
+
+.fileUploadLabel {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fileUploadContainer {
+  display: block;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+}
