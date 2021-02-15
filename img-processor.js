@@ -1,4 +1,6 @@
 const Jimp = require("jimp");
+const NUMLEVELS = 7;
+const LEVELWIDTH = 256 / NUMLEVELS;
 
 module.exports.prepare = function (filePath) {
   Jimp.read(filePath, (err, file) => {
@@ -14,10 +16,10 @@ module.exports.prepare = function (filePath) {
   });
 };
 
-module.exports.quantize = function (filePath, callback) {
+module.exports.luminance = function (filePath, callback) {
   Jimp.read(filePath, (err, file) => {
     if (err) throw err;
-    console.log("\n\n--Start--\n\n");
+
     let imgArray = [];
     for (xpixel = 0, width = file.getWidth(); xpixel < width; xpixel++) {
       let pixels = [];
@@ -32,12 +34,38 @@ module.exports.quantize = function (filePath, callback) {
   });
 };
 
-module.exports.dither = function (filePath) {
+module.exports.dither = function (filePath, callback) {
   Jimp.read(filePath, (err, file) => {
     if (err) throw err;
+    console.log("\n\n--Start--\n\n");
     module.exports.prepare(filePath);
-    module.exports.quantize(filePath, (imgArray) => {
-      console.log(imgArray);
+    module.exports.luminance(filePath, (img) => {
+      //   console.log(img);
+      console.log(img.length, img[0].length);
+      for (let x = 0, row = img[x]; x < img.length; x++, row = img[x]) {
+        for (let y = 0, pixel = img[y]; y < row.length; y++, pixel = row[y]) {
+          console.log(y);
+          let qVal = Math.floor((pixel + 1) / LEVELWIDTH);
+          img[x][y] = qVal;
+          let debt = pixel - qVal * 7;
+          // #region Error Correction
+          // Right
+          y < row.length && (img[x][y + 1] += Math.round((7 / 16) * debt));
+          // Bottom right
+          x < img.length &&
+            y < row.length &&
+            (img[x + 1][y + 1] += Math.round(1 / 16) * debt);
+          // Bottom
+          x < img.length && (img[x + 1][y] += Math.round(5 / 16) * debt);
+          // Bottom left
+          x < img.length &&
+            y > 0 &&
+            (img[x + 1][y - 1] += Math.round(3 / 16) * debt);
+          //#endregion
+        }
+      }
+      console.log(img);
+      callback();
       console.log("\n\nDone\n\n");
     });
   });
