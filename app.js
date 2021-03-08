@@ -1,5 +1,4 @@
 const express = require("express");
-const Jimp = require("jimp");
 const fileUpload = require("express-fileupload");
 const imgProcessor = require(`${__dirname}/img-processor.js`);
 

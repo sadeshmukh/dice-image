@@ -22,8 +22,9 @@ button {
   font-family: "Montserrat", sans-serif;
 }
 
-td {
+pre {
   margin: 0;
   padding: 0;
   line-height: 0.75;
+  font-size: 4px;
 }

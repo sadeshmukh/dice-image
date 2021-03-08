@@ -36,20 +36,14 @@
     </form>
 
     <img class="mt-2" id="currentImage" src="/results/image.jpg" />
-<table>
-<% 
+<pre><% 
 let dots = ['□', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'].reverse();
 // let dots = ['#000', '#111', '#333', '#666', '#999', '#ccc', '#fff'];
 for (let x = 0; x < imageArray.length; x++) { 
     let row = imageArray[x];
     %>
-    <tr>
-    <% for (let y = 0; y < imageArray[0].length; y++) { %>
-          <td><%=dots[row[y]]%></td>
-        <%}%>
-    </tr>
-<%}%>
-</table>
+    <% for (let y = 0; y < imageArray[0].length; y++) { %><%=dots[row[y]]%><%}%><%}%>
+</pre>
 
     <!--Bootstrap Goes Here-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
