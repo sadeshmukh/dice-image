@@ -77,3 +77,14 @@ module.exports.dither = function (filePath, callback) {
     });
   });
 };
+
+module.exports.renderDice = function () {
+  let dots = ["□", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"].reverse();
+  // let dots = ['#000', '#111', '#333', '#666', '#999', '#ccc', '#fff'];
+  for (let x = 0; x < imageArray.length; x++) {
+    let row = imageArray[x];
+    for (let y = 0; y < imageArray[0].length; y++) {
+      var something = dots[row[y]];
+    }
+  }
+};

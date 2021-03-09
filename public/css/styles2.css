@@ -1,0 +1,93 @@
+body {
+  font-family: "Merriweather", "Cabin", sans-serif;
+  text-align: center;
+  background-color: #fbf7f0;
+  /* padding: 0 10% 3% 10%; */
+}
+
+@media (max-width: 992px) {
+  body {
+    /* padding: 0 0 3% 0; */
+  }
+}
+
+input,
+button {
+  padding: 0.5rem;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+}
+
+.fileUploadLabel {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fileUploadContainer {
+  display: block;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 150%;
+  margin: 0.5%;
+}
+
+.navbar-page {
+  font-family: "Montserrat";
+}
+
+.image-select {
+  padding: 1rem;
+  background-color: #d9e4dd;
+  margin-bottom: 1rem;
+}
+
+.image-select > button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  display: inline-block;
+  margin: 1.25rem;
+  height: 250px;
+  width: 250px;
+}
+
+.upload-icon {
+  font-size: 32px;
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+}
+
+.image-select > button:active {
+  filter: brightness(0.75);
+  border-color: green;
+}
+
+.image-select img {
+  width: 250px;
+  height: 250px;
+}
+
+button.upload-image img {
+  width: 125px;
+  height: 125px;
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+  line-height: 0.75;
+  font-size: 4px;
+}
+
+footer {
+  margin-top: 1rem;
+  color: #fbf7f0;
+  padding: 2rem;
+  background-color: #555555;
+}
