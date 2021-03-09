@@ -88,6 +88,10 @@ pre {
 footer {
   margin-top: 1rem;
   color: #fbf7f0;
-  padding: 2rem;
+  padding: 0.75rem;
   background-color: #555555;
+}
+
+footer > p {
+  margin: 0;
 }
