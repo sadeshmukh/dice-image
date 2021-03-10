@@ -2,6 +2,7 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 const imgProcessor = require(`${__dirname}/img-processor.js`);
 const fs = require("fs");
+const os = require("os");
 const imageCache = {};
 const app = express();
 
@@ -9,7 +10,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: "/tmp/",
+    tempFileDir: os.tmpdir(),
   })
 );
 app.set("view engine", "ejs");
@@ -27,7 +28,6 @@ app.get("/new", function (req, res) {
     allFiles[i] = allFiles[i].slice(0, -4);
   });
 
-  console.log(allFiles);
   const countFiles = allFiles.length;
   let sampleImages = [];
 
@@ -37,52 +37,40 @@ app.get("/new", function (req, res) {
     let randomImage = allFiles[Math.floor(Math.random() * countFiles)];
     if (!sampleImages.includes(randomImage) && randomImage.charAt(0) != ".") {
       sampleImages.push(randomImage);
-      // console.log(randomImage);
     }
     i++;
   }
 
-  console.log(sampleImages);
   res.render("index2", { imageArray: [], sampleImages: sampleImages });
 });
-
-// app.get("/results/:path", function (req, res) {
-//   res.sendFile(`${__dirname}/results/${req.params.path}`);
-// });
 
 app.get("/results/:image", function (req, res) {
   if (imageCache[req.params.image]) {
     res.send(imageCache[req.params.image]);
-    console.log(imageCache);
     return;
   }
 
   imgProcessor.dither(
     `${__dirname}/public/images/samples/${req.params.image}.jpg`,
     (err, imgArray) => {
-      console.log("callback called back");
       imageCache[req.params.image] = imgArray;
       res.send(imgArray);
     }
   );
 });
 
-app.post("/", function (req, res) {
+app.post("/upload", function (req, res) {
   let file = req.files.file;
-  console.log(file.tempFilePath);
+  console.log(file);
   imgProcessor.dither(file.tempFilePath, (err, imgArray) => {
-    console.log("callback called back");
-    res.render("index", {
-      imageArray: imgArray,
-    });
+    if (err) throw err;
+    res.send(imgArray);
   });
 });
 
 app.post("/new", function (req, res) {
   let file = req.files.file;
-  console.log(file.tempFilePath);
   imgProcessor.dither(file.tempFilePath, (err, imgArray) => {
-    console.log("callback called back");
     res.render("index2", {
       imageArray: imgArray,
     });

@@ -41,26 +41,12 @@
       <%})%>
       <button href="#" id="uploadButton" class="upload-image"><img src="images/upload.png"/></button>
       <!-- <button><i class="fas fa-upload upload-icon"></i></button> -->
+
     </div>
 
-
-
-
-
-    <!-- <form action="/new" method="POST" enctype="multipart/form-data">
-      <div class="fileUploadContainer">
-        <input type="file" name="file" id="fileUpload" hidden />
-        <label
-          for="fileUpload"
-          class="btn fileUploadLabel btn-lg btn-dark ms-auto me-auto mb-2"
-        >
-          Choose file
-        </label>
-        <span id="fileChosen" class="ms-2"> No file chosen </span>
-      </div>
-
-      <input type="submit" class="btn btn-lg btn-success" id="imageSubmit" />
-    </form> -->
+    <form action="/new" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" id="fileUpload" hidden />
+    </form>
 
 <pre><% 
 let dots = ['□', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'].reverse();

@@ -41,11 +41,8 @@ module.exports.luminance = function (filePath, callback) {
 module.exports.dither = function (filePath, callback) {
   Jimp.read(filePath, (err, file) => {
     if (err) throw err;
-    console.log("\n\n--Start--\n\n");
     module.exports.prepare(filePath, (filePath) => {
       module.exports.luminance(filePath, (img) => {
-        //   console.log(img);
-        console.log(img.length, img[0].length);
         for (let x = 0, row = img[x]; x < img.length; x++, row = img[x]) {
           for (let y = 0, pixel = row[y]; y < row.length; y++, pixel = row[y]) {
             pixel = clamp(pixel, 0, 255);
@@ -70,9 +67,7 @@ module.exports.dither = function (filePath, callback) {
             //#endregion
           }
         }
-        console.log(img);
         callback(null, img);
-        console.log("\n\nDone\n\n");
       });
     });
   });
