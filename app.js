@@ -16,12 +16,6 @@ app.use(
 app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
-  res.render("index", {
-    imageArray: [],
-  });
-});
-
-app.get("/new", function (req, res) {
   allFiles = fs.readdirSync("public/images/samples");
 
   allFiles.forEach(function (val, i) {
@@ -68,15 +62,6 @@ app.post("/upload", function (req, res) {
   });
 });
 
-app.post("/new", function (req, res) {
-  let file = req.files.file;
-  imgProcessor.dither(file.tempFilePath, (err, imgArray) => {
-    res.render("index2", {
-      imageArray: imgArray,
-    });
-  });
-});
-
-app.listen(3000, function () {
+app.listen(process.env.PORT || 3000, function () {
   console.log("Server running");
 });
