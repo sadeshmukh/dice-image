@@ -48,4 +48,5 @@ function makeDice(imgArray) {
     retval += line + "\n";
   }
   $("pre").text(retval);
+  return retval;
 }
