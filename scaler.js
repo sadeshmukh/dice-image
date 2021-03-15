@@ -2,7 +2,7 @@ const Jimp = require("jimp");
 const fs = require("fs");
 const NUMLEVELS = 7;
 const LEVELWIDTH = 256 / NUMLEVELS;
-const RESIZECLAMP = 400;
+const RESIZECLAMP = 250;
 const SOURCE_DIR = "/Users/sdeshmukh/Downloads/unsplash";
 
 function scaleToFit(filePath, resultFileName) {

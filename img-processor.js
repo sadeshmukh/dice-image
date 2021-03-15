@@ -1,7 +1,7 @@
 const Jimp = require("jimp");
 const NUMLEVELS = 7;
 const LEVELWIDTH = 256 / NUMLEVELS;
-const RESIZECLAMP = 400;
+const RESIZECLAMP = 250;
 
 const clamp = (num, a, b) =>
   Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
