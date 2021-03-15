@@ -1,5 +1,6 @@
 const results = {};
 const acceptableTypes = ["image/png", "image/jpeg"];
+const diceCounts = {};
 
 $("#uploadButton").click(function () {
   $("#fileUpload").click();
@@ -10,6 +11,11 @@ $("#fileUpload").on("change", function () {
     alert("Please upload a JPG or PNG file type.");
     return;
   }
+
+  $(".uploadSpinner").attr("hidden", false);
+  $("#uploadButton p").text(" Loading...");
+  $("#uploadButton").attr("disabled", true);
+
   $.ajax({
     url: "/upload",
     type: "POST",
@@ -18,15 +24,18 @@ $("#fileUpload").on("change", function () {
     contentType: false,
     processData: false,
     complete: function (jqXHR, status) {
-      let retval = makeDice(jqXHR.responseJSON);
+      makeDice(jqXHR.responseJSON);
+      $(".uploadSpinner").attr("hidden", true);
+      $("#uploadButton p").text("Upload");
+      $("#uploadButton").attr("disabled", false);
     },
   });
 });
 
-$(".image-select button").click(function () {
+$(".sample-image").click(function () {
   let imageName = this.name;
   if (imageName in results) {
-    $("pre").text(results[imageName]);
+    $("#diceImage").text(results[imageName]);
     return;
   }
   $.get(`/results/${imageName}`, function (imgArray) {
@@ -44,9 +53,23 @@ function makeDice(imgArray) {
     let line = "";
     for (let y = 0; y < imgArray[0].length; y++) {
       line += dots[row[y]];
+      if (diceCounts[dots[row[y]]]) {
+        diceCounts[dots[row[y]]] += 1;
+      } else {
+        diceCounts[dots[row[y]]] = 1;
+      }
     }
     retval += line + "\n";
   }
-  $("pre").text(retval);
+  console.log(diceCounts);
+  $("#diceImage").text(retval);
+  let i = 0;
+  let reversedDots = [...dots].reverse();
+  $(".dicecount").each(function () {
+    let currentDice = reversedDots[i];
+    $(this).text(`${currentDice} ${diceCounts[currentDice]}`);
+    i++;
+    console.log("HI" + i);
+  });
   return retval;
 }

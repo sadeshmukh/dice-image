@@ -36,28 +36,43 @@
     </nav>
 
     <div class="image-select">
+      <div class="row">
       <%sampleImages.forEach(function (val, i) {%>
-        <button id="sample<%=i + 1%>" name="<%=val%>"><img src="images/samples/<%=val%>.jpg"></button>
+        <div class="col-lg-3 col-md-6 col-sm-12 sample-image-div"><button class="sample-image border-5 border-white rounded-3" id="sample<%=i + 1%>" name="<%=val%>"><img src="images/samples/<%=val%>.jpg"></button></div>
       <%})%>
-      <button href="#" id="uploadButton" class="upload-image"><img src="images/upload.png"/></button>
+      </div>
+      
       <!-- <button><i class="fas fa-upload upload-icon"></i></button> -->
-
+      <button href="#" id="uploadButton" class="btn btn-primary">
+        <div class="uploadButtonContent">
+          <span class="spinner-grow spinner-grow-sm text-light uploadSpinner" role="status" aria-hidden="true" hidden></span>
+          <p>Upload</p>
+          <span class="spinner-grow spinner-grow-sm text-light uploadSpinner" role="status" aria-hidden="true" hidden></span>
+        </div>
+          
+      </button>
     </div>
+    
+    
 
     <form method="POST" enctype="multipart/form-data">
       <input type="file" name="file" id="fileUpload" hidden />
     </form>
 
-<pre><% 
-let dots = ['□', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'].reverse();
-// let dots = ['#000', '#111', '#333', '#666', '#999', '#ccc', '#fff'];
-for (let x = 0; x < imageArray.length; x++) { 
-    let row = imageArray[x];
-    %>
-    <% for (let y = 0; y < imageArray[0].length; y++) { %><%=dots[row[y]]%><%}%><%}%>
-</pre>
+<pre id="diceImage"></pre>
 
-<footer class="sticky-bottom"><p>© Sahil Deshmukh 2021</p></footer>
+<!-- TODO: Render a simple chart that shows bars made of dice -->
+<div id="dicecountdiv" class="mb-5"><p class="dice-0 dicecount"></p>
+<p class="dice-1 dicecount"></p>
+<p class="dice-2 dicecount"></p>
+<p class="dice-3 dicecount"></p>
+<p class="dice-4 dicecount"></p>
+<p class="dice-5 dicecount"></p>
+<p class="dice-6 dicecount"></p></div>
+
+
+
+<footer class="fixed-bottom"><p>© Sahil Deshmukh 2021</p></footer>
     <!--Scripts-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

@@ -46,43 +46,63 @@ button {
   margin-bottom: 1rem;
 }
 
-.image-select > button {
+.image-select button.sample-image {
   padding: 0;
-  margin: 0;
-  border: none;
   display: inline-block;
   margin: 1.25rem;
   height: 250px;
   width: 250px;
+  border-style: solid;
 }
 
-.upload-icon {
-  font-size: 32px;
-  margin: 0;
-  padding: 0;
-  line-height: normal;
-}
-
-.image-select > button:active {
+.image-select > button.sample-image:active {
   filter: brightness(0.75);
   border-color: green;
 }
 
-.image-select img {
-  width: 250px;
-  height: 250px;
+.image-select .sample-image img {
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+}
+#uploadButton {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
 }
 
-button.upload-image img {
-  width: 125px;
-  height: 125px;
+.uploadButtonContent {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: inline;
 }
 
-pre {
+.uploadButtonContent p {
+  margin-bottom: 0;
+  display: inline;
+}
+
+#diceImage {
   margin: 0;
   padding: 0;
   line-height: 0.75;
-  font-size: 4px;
+  /* letter-spacing: 0.5px; */
+  font-size: 8px;
+  display: inline-block;
+}
+
+@media (max-width: 1300px) {
+  #diceImage {
+    font-size: 6px;
+  }
+}
+
+@media (max-width: 850px) {
+  #diceImage {
+    font-size: 4px;
+  }
 }
 
 footer {

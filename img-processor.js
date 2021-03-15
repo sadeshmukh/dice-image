@@ -9,14 +9,13 @@ const clamp = (num, a, b) =>
 module.exports.prepare = function (filePath, callback) {
   Jimp.read(filePath, (err, file) => {
     if (err) throw err;
-    file.grayscale();
     if (file.getHeight() > RESIZECLAMP && file.getHeight() >= file.getWidth()) {
       file.resize(Jimp.AUTO, RESIZECLAMP);
     } else if (file.getWidth() > RESIZECLAMP) {
       file.resize(RESIZECLAMP, Jimp.AUTO);
     }
     file.write(filePath);
-    callback(filePath);
+    callback();
   });
 };
 
@@ -29,7 +28,7 @@ module.exports.luminance = function (filePath, callback) {
       let pixels = [];
       for (xpixel = 0, width = file.getWidth(); xpixel < width; xpixel++) {
         let rgbVal = Jimp.intToRGBA(file.getPixelColor(xpixel, ypixel));
-        let quantVal = rgbVal.r;
+        let quantVal = (rgbVal.r + rgbVal.g + rgbVal.b) / 3;
         pixels.push(quantVal);
       }
       imgArray.push(pixels);
@@ -40,46 +39,32 @@ module.exports.luminance = function (filePath, callback) {
 
 module.exports.dither = function (filePath, callback) {
   Jimp.read(filePath, (err, file) => {
-    if (err) throw err;
-    module.exports.prepare(filePath, (filePath) => {
-      module.exports.luminance(filePath, (img) => {
-        for (let x = 0, row = img[x]; x < img.length; x++, row = img[x]) {
-          for (let y = 0, pixel = row[y]; y < row.length; y++, pixel = row[y]) {
-            pixel = clamp(pixel, 0, 255);
-            let qVal = Math.floor(pixel / LEVELWIDTH);
-            img[x][y] = qVal;
-            let debt = pixel - qVal * NUMLEVELS;
+    if (err) callback(err, null);
+    module.exports.luminance(filePath, (img) => {
+      for (let x = 0, row = img[x]; x < img.length; x++, row = img[x]) {
+        for (let y = 0, pixel = row[y]; y < row.length; y++, pixel = row[y]) {
+          pixel = clamp(pixel, 0, 255);
+          let qVal = Math.floor(pixel / LEVELWIDTH);
+          img[x][y] = qVal;
+          let debt = pixel - qVal * NUMLEVELS;
 
-            // #region Error Correction
-            // Right
+          // #region Error Correction
+          // Right
+          y + 1 < row.length && (img[x][y + 1] += Math.round((7 / 16) * debt));
+          // Bottom right
+          x + 1 < img.length &&
             y + 1 < row.length &&
-              (img[x][y + 1] += Math.round((7 / 16) * debt));
-            // Bottom right
-            x + 1 < img.length &&
-              y + 1 < row.length &&
-              (img[x + 1][y + 1] += Math.round(1 / 16) * debt);
-            // Bottom
-            x + 1 < img.length && (img[x + 1][y] += Math.round(5 / 16) * debt);
-            // Bottom left
-            x + 1 < img.length &&
-              y > 0 &&
-              (img[x + 1][y - 1] += Math.round(3 / 16) * debt);
-            //#endregion
-          }
+            (img[x + 1][y + 1] += Math.round(1 / 16) * debt);
+          // Bottom
+          x + 1 < img.length && (img[x + 1][y] += Math.round(5 / 16) * debt);
+          // Bottom left
+          x + 1 < img.length &&
+            y > 0 &&
+            (img[x + 1][y - 1] += Math.round(3 / 16) * debt);
+          //#endregion
         }
-        callback(null, img);
-      });
+      }
+      callback(null, img);
     });
   });
-};
-
-module.exports.renderDice = function () {
-  let dots = ["□", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"].reverse();
-  // let dots = ['#000', '#111', '#333', '#666', '#999', '#ccc', '#fff'];
-  for (let x = 0; x < imageArray.length; x++) {
-    let row = imageArray[x];
-    for (let y = 0; y < imageArray[0].length; y++) {
-      var something = dots[row[y]];
-    }
-  }
 };
