@@ -1,14 +1,20 @@
 const results = {};
 const acceptableTypes = ["image/png", "image/jpeg"];
 const diceCounts = {};
+const MB = 1024 * 1024;
+const maxFileSize = 5 * MB;
 
 $("#uploadButton").click(function () {
   $("#fileUpload").click();
 });
 
 $("#fileUpload").on("change", function () {
-  if (!acceptableTypes.includes(this.files[0].type)) {
-    alert("Please upload a JPG or PNG file type.");
+  if (this.files[0].size > maxFileSize) {
+    alert(
+      `File size ${(this.files[0].size / MB).toFixed(2)}MB larger than ${
+        maxFileSize / MB
+      }MB.`
+    );
     return;
   }
 
