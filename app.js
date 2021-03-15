@@ -56,12 +56,12 @@ app.get("/results/:image", function (req, res) {
 app.post("/upload", function (req, res) {
   let file = req.files.file;
   if (!allowedImageTypes.includes(file.mimetype)) {
-    res.sendStatus(415).send(`Unsupported media type: ${file.mimetype}.`);
+    res.status(415).send(`Unsupported media type: ${file.mimetype}.`);
   } else {
     imgProcessor.prepare(file.tempFilePath, () =>
       imgProcessor.dither(file.tempFilePath, (err, imgArray) => {
-        if (err) throw err;
-        res.send(imgArray);
+        if (err) res.status(503).send("An error occurred in the application.");
+        else res.send(imgArray);
       })
     );
   }
