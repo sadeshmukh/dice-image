@@ -37,7 +37,11 @@ app.get("/", function (req, res) {
   while (sampleImages.length < numSampleImages) {
     let randomImage =
       imageCacheKeys[Math.floor(Math.random() * imageCacheKeys.length)];
-    if (!sampleImages.includes(randomImage) && randomImage.charAt(0) != ".") {
+    if (
+      randomImage &&
+      !sampleImages.includes(randomImage) &&
+      randomImage.charAt(0) != "."
+    ) {
       sampleImages.push(randomImage);
     }
     i++;
@@ -68,7 +72,7 @@ app.post("/upload", function (req, res) {
 });
 
 app.get("*", function (req, res) {
-  res.render("404");
+  res.status(404).render("404");
 });
 
 app.listen(process.env.PORT || 3000, function () {

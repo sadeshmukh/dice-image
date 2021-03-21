@@ -4,6 +4,16 @@ const diceCounts = {};
 const MB = 1024 * 1024;
 const maxFileSize = 5 * MB;
 
+$.get("/txt/bannerTitle.txt", function (data) {
+  // Show banner title in console
+  console.log(data);
+});
+
+$.get("/txt/banner.txt", function (data) {
+  // Show banner in console
+  console.log(data);
+});
+
 $("#uploadButton").click(function () {
   $("#fileUpload").click();
 });
@@ -51,7 +61,7 @@ $(".sample-image").click(function () {
 });
 
 function makeDice(imgArray) {
-  let dots = ["□", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"].reverse();
+  let dots = ["▢", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"].reverse();
   // let dots = ['#000', '#111', '#333', '#666', '#999', '#ccc', '#fff'];
   let retval = "";
   for (let x = 0; x < imgArray.length; x++) {
@@ -75,7 +85,6 @@ function makeDice(imgArray) {
     let currentDice = reversedDots[i];
     $(this).text(`${currentDice} ${diceCounts[currentDice]}`);
     i++;
-    console.log("HI" + i);
   });
   return retval;
 }
