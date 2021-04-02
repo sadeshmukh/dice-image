@@ -90,8 +90,9 @@ function makeDice(imgArray) {
       (diceCounts[currentDice] * diceHistogramTotal) /
         (imgArray.length * imgArray[0].length)
     );
-    $(this).text(`${currentDice} ${diceCounts[currentDice]}`);
+    $(this).text(`${diceCounts[currentDice]}`);
     i++;
   });
+  $("#diceTotal").text(imgArray.length * imgArray[0].length);
   return retval;
 }

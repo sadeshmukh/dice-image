@@ -34,10 +34,47 @@
         </div>
       </nav>
 
-      <di class="row">
-          <main id="mainContent" class="mt-5 col-lg-8 p-5 col-md-10 col-sm-12">
-          <h1>How it Works</h1>
-          <p>dfsdfsad</p>
+      <div class="row">
+        <main id="mainContent" class="col-lg-8 p-5 col-md-10 col-sm-12 bg-white">
+        <h1>How it Works</h1>
+        <img src="images/about_1.png" class="about-img bg-white rounded-3 mb-3">
+        <p>
+            This site has two parts - frontend and backend. 
+            Frontend is code that runs in the browser, and backend is code that runs on an external computer, called a server.
+            Our frontend is implemented using Bootstrap, the most popular framework for building responsive websites.
+            We also use jQuery to dynamically change the content on the page and interact with the backend.
+            On the backend, we use NodeJS with Express to create a web server and to process images, powered by the Jimp library.
+        </p>
+        <p>
+            On loading, the browser shows you four randomly selected images.
+            When you select one of these images, the browser sends an AJAX request to the server with the image name.
+            The server sends back a 2D array, consisting of the dice value of each pixel.
+            The server picks an appropriate dice for that pixel.
+            The brighter the pixel, the less dots will be on that dice.
+        </p>
+        <p>
+            On the server, a NodeJS program first resizes the images to an acceptable range, using JIMP for image processing.
+            After resizing, it reads the RGB value of each pixel and averages them to calculate the grayscale value of that pixel. 
+        </p>
+        <script src="https://gist.github.com/sadeshmukh/11acde32d0f639398b00b8ddefa5666a.js?file=rgbToBrightness.js"></script>
+        <p>
+            Each grayscale value is a number from 0 through 255.
+            In the final image, we can use 6 faces of the die and an empty face.
+            We must convert this range from 0 through 255 to a range 0 through 6. 
+        </p>
+        <script src="https://gist.github.com/sadeshmukh/11acde32d0f639398b00b8ddefa5666a.js?file=scale256to7.js"></script>      
+        <p>
+            However, just sending this response is a naive approach.
+            When you scale it from 255 to 6, there is a difference between the actual darkness value and this rounded value.
+            To account for this, we use an algorithm called Floyd-Steinberg dithering.
+            This algorithm distributes errors across neighboring pixels (as shown).
+            This evens out the errors and eliminates blotches on the final image.
+        </p>
+        <p>
+            Once we have our final quantized values, the data is sent back to the browser.
+            The browser, using our code, converts these quantized values into dice characters.
+            The jQuery changes your screen to show the final image, and you are shown the Dice Image.
+        </p>
         </main>
       </div>
       
