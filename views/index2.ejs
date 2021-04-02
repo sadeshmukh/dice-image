@@ -21,14 +21,14 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand brand" href="#">Dice Image</a>
+        <a class="navbar-brand brand" href="/" aria-current="page">Dice Image</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item navbar-page">
-              <a class="nav-link active ms-4" href="#">About</a>
+              <a class="nav-link active ms-4" href="/about">About</a>
             </li>
           </ul>
         </div>
@@ -41,7 +41,7 @@
         <div class="col-lg-3 col-md-6 col-sm-12 sample-image-div"><button class="sample-image border-5 border-white rounded-3" id="sample<%=i + 1%>" name="<%=val%>"><img src="images/samples/<%=val%>.jpg"></button></div>
       <%})%>
       </div>
-      
+ 
       <!-- <button><i class="fas fa-upload upload-icon"></i></button> -->
       <button href="#" id="uploadButton" class="btn btn-primary">
         <div class="uploadButtonContent">
@@ -53,22 +53,47 @@
       </button>
     </div>
     
-    
+    <a data-bs-toggle="modal" href="#" id="statsTrigger" class="link-primary" data-bs-target="#staticBackdrop" hidden>Stats</a>
+
 
     <form method="POST" enctype="multipart/form-data">
       <input type="file" accept="image/jpeg,image/png" name="file" id="fileUpload" hidden />
     </form>
 
+<!-- THE DiceImage - VERY IMPORTANT -->
 <pre id="diceImage"></pre>
 
-<!-- TODO: Render a simple chart that shows bars made of dice -->
-<div id="dicecountdiv" class="mb-5"><p class="dice-0 dicecount"></p>
-<p class="dice-1 dicecount"></p>
-<p class="dice-2 dicecount"></p>
-<p class="dice-3 dicecount"></p>
-<p class="dice-4 dicecount"></p>
-<p class="dice-5 dicecount"></p>
-<p class="dice-6 dicecount"></p></div>
+<!-- Button trigger modal -->
+<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="statsTrigger" data-bs-target="#staticBackdrop" hidden>
+  Stats
+</button> -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Stats</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="dicecountdiv" class="mb-5">
+          <p class="dice-0 dicecount"></p>
+          <p class="dice-1 dicecount"></p>
+          <p class="dice-2 dicecount"></p>
+          <p class="dice-3 dicecount"></p>
+          <p class="dice-4 dicecount"></p>
+          <p class="dice-5 dicecount"></p>
+          <p class="dice-6 dicecount"></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

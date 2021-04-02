@@ -2,6 +2,7 @@ body {
   font-family: "Merriweather", "Cabin", sans-serif;
   text-align: center;
   background-color: #fbf7f0;
+  padding-bottom: 200px;
   /* padding: 0 10% 3% 10%; */
 }
 
@@ -9,6 +10,22 @@ body {
   body {
     /* padding: 0 0 3% 0; */
   }
+}
+
+h1 {
+  font-family: "Montserrat";
+}
+
+p {
+  font-family: "Cabin";
+}
+
+#uploadButton p {
+  font-family: "Montserrat";
+}
+
+#mainContent {
+  margin: auto;
 }
 
 input,
@@ -114,4 +131,14 @@ footer {
 
 footer > p {
   margin: 0;
+}
+
+#statsTrigger {
+  display: block;
+  margin: 1rem auto;
+}
+
+.dicecount {
+  text-align: left;
+  line-height: 0.75;
 }

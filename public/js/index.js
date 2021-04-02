@@ -3,6 +3,7 @@ const acceptableTypes = ["image/png", "image/jpeg"];
 const diceCounts = {};
 const MB = 1024 * 1024;
 const maxFileSize = 5 * MB;
+const diceHistogramTotal = 35;
 
 $.get("/txt/bannerTitle.txt", function (data) {
   // Show banner title in console
@@ -44,6 +45,7 @@ $("#fileUpload").on("change", function () {
       $(".uploadSpinner").attr("hidden", true);
       $("#uploadButton p").text("Upload");
       $("#uploadButton").attr("disabled", false);
+      $("#statsTrigger").attr("hidden", false);
     },
   });
 });
@@ -55,6 +57,7 @@ $(".sample-image").click(function () {
     return;
   }
   $.get(`/results/${imageName}`, function (imgArray) {
+    $("#statsTrigger").attr("hidden", false);
     let retval = makeDice(imgArray);
     results[imageName] = retval;
   });
@@ -83,6 +86,10 @@ function makeDice(imgArray) {
   let reversedDots = [...dots].reverse();
   $(".dicecount").each(function () {
     let currentDice = reversedDots[i];
+    let numberCurrentDice = Math.ceil(
+      (diceCounts[currentDice] * diceHistogramTotal) /
+        (imgArray.length * imgArray[0].length)
+    );
     $(this).text(`${currentDice} ${diceCounts[currentDice]}`);
     i++;
   });

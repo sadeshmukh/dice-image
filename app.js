@@ -50,6 +50,10 @@ app.get("/", function (req, res) {
   res.render("index2", { sampleImages: sampleImages });
 });
 
+app.get("/about", function (req, res) {
+  res.render("about");
+});
+
 app.get("/results/:image", function (req, res) {
   if (imageCache[req.params.image]) {
     res.send(imageCache[req.params.image]);
