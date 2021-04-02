@@ -1,9 +1,10 @@
 const results = {};
 const acceptableTypes = ["image/png", "image/jpeg"];
-const diceCounts = {};
 const MB = 1024 * 1024;
 const maxFileSize = 5 * MB;
 const diceHistogramTotal = 35;
+const dots = ["▢", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"].reverse();
+const reversedDots = [...dots].reverse();
 
 $.get("/txt/bannerTitle.txt", function (data) {
   // Show banner title in console
@@ -53,46 +54,46 @@ $("#fileUpload").on("change", function () {
 $(".sample-image").click(function () {
   let imageName = this.name;
   if (imageName in results) {
-    $("#diceImage").text(results[imageName]);
-    return;
+    $("#diceImage").text(results[imageName].text);
+    calculateStats(results[imageName].counts);
+  } else {
+    $.get(`/results/${imageName}`, function (imgArray) {
+      $("#statsTrigger").attr("hidden", false);
+      results[imageName] = makeDice(imgArray);
+      calculateStats(results[imageName].counts);
+    });
   }
-  $.get(`/results/${imageName}`, function (imgArray) {
-    $("#statsTrigger").attr("hidden", false);
-    let retval = makeDice(imgArray);
-    results[imageName] = retval;
-  });
 });
 
 function makeDice(imgArray) {
-  let dots = ["▢", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"].reverse();
   // let dots = ['#000', '#111', '#333', '#666', '#999', '#ccc', '#fff'];
-  let retval = "";
+  let retval = {
+    text: "",
+    counts: {},
+  };
   for (let x = 0; x < imgArray.length; x++) {
     let row = imgArray[x];
     let line = "";
     for (let y = 0; y < imgArray[0].length; y++) {
       line += dots[row[y]];
-      if (diceCounts[dots[row[y]]]) {
-        diceCounts[dots[row[y]]] += 1;
+      if (retval.counts[dots[row[y]]]) {
+        retval.counts[dots[row[y]]] += 1;
       } else {
-        diceCounts[dots[row[y]]] = 1;
+        retval.counts[dots[row[y]]] = 1;
       }
     }
-    retval += line + "\n";
+    retval.text += line + "\n";
   }
-  console.log(diceCounts);
-  $("#diceImage").text(retval);
+  $("#diceImage").text(retval.text);
+  return retval;
+}
+
+function calculateStats(diceCounts) {
   let i = 0;
-  let reversedDots = [...dots].reverse();
   $(".dicecount").each(function () {
     let currentDice = reversedDots[i];
-    let numberCurrentDice = Math.ceil(
-      (diceCounts[currentDice] * diceHistogramTotal) /
-        (imgArray.length * imgArray[0].length)
-    );
     $(this).text(`${diceCounts[currentDice]}`);
     i++;
   });
-  $("#diceTotal").text(imgArray.length * imgArray[0].length);
-  return retval;
+  $("#diceTotal").text(Object.values(diceCounts).reduce((a, b) => a + b, 0));
 }
