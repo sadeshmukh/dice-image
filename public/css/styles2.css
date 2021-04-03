@@ -56,9 +56,18 @@ button {
   font-size: 3rem;
 }
 
-#mainContent p {
+#mainContent .about-content {
   font-size: 1.25rem;
   text-align: left;
+}
+
+.citation {
+  color: #808080;
+  font-size: 0.75rem;
+}
+
+.citation a {
+  color: #606060;
 }
 
 .brand {
