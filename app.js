@@ -57,7 +57,8 @@ app.get("/about", function (req, res) {
 app.get("/results/:image", function (req, res) {
   if (imageCache[req.params.image]) {
     res.send(imageCache[req.params.image]);
-    return;
+  } else {
+    res.status(404).render("404");
   }
 });
 

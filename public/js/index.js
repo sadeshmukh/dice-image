@@ -42,7 +42,7 @@ $("#fileUpload").on("change", function () {
     contentType: false,
     processData: false,
     complete: function (jqXHR, status) {
-      makeDice(jqXHR.responseJSON);
+      calculateStats(makeDice(jqXHR.responseJSON).counts);
       $(".uploadSpinner").attr("hidden", true);
       $("#uploadButton p").text("Upload");
       $("#uploadButton").attr("disabled", false);
