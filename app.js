@@ -8,18 +8,23 @@ const app = express();
 const numSampleImages = 4;
 const allowedImageTypes = ["image/png", "image/jpeg"];
 
-fs.readdirSync("public/images/samples", {
-  withFileTypes: true,
-})
-  .filter((dirent) => dirent.name.endsWith("jpg") && dirent.isFile())
-  .forEach(function (dirent, i) {
-    imgProcessor.dither(
-      `${__dirname}/public/images/samples/${dirent.name}`,
-      (err, imgArray) => {
-        imageCache[dirent.name.slice(0, -4)] = imgArray;
-      }
-    );
-  });
+fs.readdir(
+  "public/images/samples",
+  {
+    withFileTypes: true,
+  },
+  (err, files) =>
+    files
+      .filter((dirent) => dirent.name.endsWith("jpg") && dirent.isFile())
+      .forEach(function (dirent, i) {
+        imgProcessor.dither(
+          `${__dirname}/public/images/samples/${dirent.name}`,
+          (err, imgArray) => {
+            imageCache[dirent.name.slice(0, -4)] = imgArray;
+          }
+        );
+      })
+);
 
 app.use(express.static(`${__dirname}/public`));
 app.use(
